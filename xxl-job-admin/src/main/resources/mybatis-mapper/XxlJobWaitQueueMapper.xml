@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xxl.job.admin.dao.XxlJobWaitQueueDao">
+
+	<resultMap id="XxlJobWaitQueue" type="com.xxl.job.admin.core.model.XxlJobWaitQueue" >
+		<result column="job_id" property="jobId" />
+	    <result column="create_time" property="createTime" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		t.job_id,
+		t.create_time
+	</sql>
+
+	<select id="select" parameterType="java.util.HashMap" resultMap="XxlJobWaitQueue">
+		SELECT <include refid="Base_Column_List" />
+		FROM XXL_JOB_QRTZ_WAIT_TRIGGERS_QUEUE AS t
+		<trim prefix="WHERE" prefixOverrides="AND | OR" >
+			<if test="jobId gt 0">
+				AND t.job_id = #{jobId}
+			</if>
+		</trim>
+	</select>
+
+	<insert id="save" parameterType="com.xxl.job.admin.core.model.XxlJobWaitQueue">
+		INSERT INTO XXL_JOB_QRTZ_WAIT_TRIGGERS_QUEUE (
+			job_id,
+			create_time
+		) VALUES (
+			#{jobId},
+			#{createTime}
+		);
+	</insert>
+
+	<delete id="delete" parameterType="java.util.HashMap">
+		DELETE
+		FROM XXL_JOB_QRTZ_WAIT_TRIGGERS_QUEUE
+		WHERE job_id = #{jobId}
+	</delete>
+
+
+</mapper>

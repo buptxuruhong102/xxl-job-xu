@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xxl.job.admin.dao.XxlJobInfoRelDao">
+
+	<resultMap id="XxlJobInfoRel" type="com.xxl.job.admin.core.model.XxlJobInfoRel" >
+		<result column="id" property="id" />
+		<result column="job_id" property="jobId" />
+	    <result column="parent_job_id" property="parentJobId" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		t.id,
+		t.job_id,
+		t.parent_job_id
+	</sql>
+
+	<select id="select" parameterType="java.util.HashMap" resultMap="XxlJobInfoRel">
+		SELECT <include refid="Base_Column_List" />
+		FROM XXL_JOB_QRTZ_TRIGGER_INFO_REL AS t
+		<trim prefix="WHERE" prefixOverrides="AND | OR" >
+			<if test="jobId gt 0">
+				AND t.job_id = #{jobId}
+			</if>
+			<if test="parentJobId gt 0">
+				AND t.parent_job_id = #{parentJobId}
+			</if>
+		</trim>
+	</select>
+
+	<insert id="save" parameterType="com.xxl.job.admin.core.model.XxlJobInfoRel" useGeneratedKeys="true" keyProperty="id" >
+		INSERT INTO XXL_JOB_QRTZ_TRIGGER_INFO_REL (
+			job_id,
+			parent_job_id
+		) VALUES (
+			#{jobId},
+			#{parentJobId}
+		);
+	</insert>
+
+	<delete id="deleteByJobId" parameterType="java.util.HashMap">
+		DELETE
+		FROM XXL_JOB_QRTZ_TRIGGER_INFO_REL
+		WHERE job_id = #{jobId}
+	</delete>
+
+
+</mapper>
